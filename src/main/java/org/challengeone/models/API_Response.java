@@ -10,7 +10,6 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import java.util.Map;
 import java.util.Scanner;
 
 public record API_Response(
@@ -40,7 +39,8 @@ public record API_Response(
 
     public static API_Response doConversion(CurrencyInfo base, CurrencyInfo target, double amount) {
 
-        URI url = URI.create("https://v6.exchangerate-api.com/v6/"+ API_KEY + "/" + base.code() + "/" + target.code() + "/" + amount);
+        URI url = URI.create("https://v6.exchangerate-api.com/v6/"+ API_KEY + "/pair/" + base.code() + "/" + target.code() + "/" + amount);
+//        System.out.println(url);
 
         HttpClient client = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder()
@@ -48,6 +48,7 @@ public record API_Response(
                                          .build();
         try {
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+//            System.out.println(response.body());
             return new Gson().fromJson(response.body(), API_Response.class);
         } catch (IOException | InterruptedException e) {
             return new API_Response("error", e.getMessage(), "", "", 0.0, 0.0);
