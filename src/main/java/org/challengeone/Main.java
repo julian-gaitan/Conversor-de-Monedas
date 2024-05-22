@@ -1,17 +1,38 @@
 package org.challengeone;
 
-//TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
-// click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
-public class Main {
-    public static void main(String[] args) {
-        //TIP Press <shortcut actionId="ShowIntentionActions"/> with your caret at the highlighted text
-        // to see how IntelliJ IDEA suggests fixing it.
-        System.out.printf("Hello and welcome!");
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.util.Scanner;
 
-        for (int i = 1; i <= 5; i++) {
-            //TIP Press <shortcut actionId="Debug"/> to start debugging your code. We have set one <icon src="AllIcons.Debugger.Db_set_breakpoint"/> breakpoint
-            // for you, but you can always add more by pressing <shortcut actionId="ToggleLineBreakpoint"/>.
-            System.out.println("i = " + i);
+public class Main {
+
+    public static void main(String[] args) throws IOException, InterruptedException {
+
+        String API_KEY = "";
+        try {
+            File myFile = new File(".APIKEY");
+            Scanner myReader = new Scanner(myFile);
+            if (myReader.hasNextLine()) {
+                API_KEY = myReader.nextLine();
+            }
+            myReader.close();
+        } catch (FileNotFoundException e) {
+            System.out.println(e.getMessage());
         }
+
+        URI url = URI.create("https://v6.exchangerate-api.com/v6/"+ API_KEY + "/pair/EUR/GBP");
+
+        HttpClient client = HttpClient.newHttpClient();
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(url)
+                .build();
+        HttpResponse<String> response = client
+                .send(request, HttpResponse.BodyHandlers.ofString());
+        System.out.println(response.body());
     }
 }
