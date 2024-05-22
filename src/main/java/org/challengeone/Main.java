@@ -2,6 +2,7 @@ package org.challengeone;
 
 import com.google.gson.Gson;
 import org.challengeone.models.API_Response;
+import org.challengeone.models.CurrencyInfo;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -16,6 +17,7 @@ public class Main {
 
     public static void main(String[] args) throws IOException, InterruptedException {
 
+        System.out.println(CurrencyInfo.CURRENCY_LIST.toString());
         String API_KEY = "";
         try {
             File myFile = new File(".APIKEY");
