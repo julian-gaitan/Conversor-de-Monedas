@@ -1,5 +1,8 @@
 package org.challengeone;
 
+import com.google.gson.Gson;
+import org.challengeone.models.API_Response;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -25,7 +28,7 @@ public class Main {
             System.out.println(e.getMessage());
         }
 
-        URI url = URI.create("https://v6.exchangerate-api.com/v6/"+ API_KEY + "/pair/EUR/GBP");
+        URI url = URI.create("https://v6.exchangerate-api.com/v6/"+ API_KEY + "/latest/USD");
 
         HttpClient client = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder()
@@ -33,6 +36,7 @@ public class Main {
                 .build();
         HttpResponse<String> response = client
                 .send(request, HttpResponse.BodyHandlers.ofString());
-        System.out.println(response.body());
+        API_Response apiResponse = new Gson().fromJson(response.body(), API_Response.class);
+        System.out.println(apiResponse);
     }
 }
